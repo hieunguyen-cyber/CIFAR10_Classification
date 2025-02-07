@@ -54,7 +54,7 @@ st.markdown("---")
 
 # Upload ảnh
 uploaded_file = st.file_uploader("📤 Chọn một ảnh...", type=["jpg", "png", "jpeg"], help="Chỉ hỗ trợ JPG, PNG, JPEG")
-
+st.write("Các lớp có thể dự đoán là: plane, car, bird, cat, deer, dog, frog, horse, ship, truck")
 if uploaded_file:
     col1, col2 = st.columns([1, 2])  # Chia bố cục 2 cột
 
