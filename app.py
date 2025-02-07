@@ -23,7 +23,7 @@ def load_model():
     device = torch.device("cuda" if torch.cuda.is_available() else 
                           "mps" if torch.backends.mps.is_available() else "cpu")
     model = CIFAR10_CNN()
-    model.load_state_dict(torch.load("./model/model.pth", map_location=device))
+    model.load_state_dict(torch.load("./model.pth", map_location=device))
     model.to(device)
     model.eval()
     return model, device
