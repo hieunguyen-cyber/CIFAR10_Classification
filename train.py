@@ -208,6 +208,6 @@ if __name__ == '__main__':
 
     plt.show()
 
-    save_path = './model/model.pth'
+    save_path = './model.pth'
     torch.save(model.state_dict(), save_path)
     print(f"Model saved to {save_path}")
