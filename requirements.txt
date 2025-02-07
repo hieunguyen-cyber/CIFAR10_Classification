@@ -6,5 +6,4 @@ streamlit
 pillow
 torchsummary
 tqdm
-PIL
 sys
