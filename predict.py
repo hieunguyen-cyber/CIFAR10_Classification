@@ -33,7 +33,7 @@ def predict(image_path, device=None):
         device = torch.device(device)
 
     # Load mô hình (mặc định là 'model.pth')
-    model_path = "./model/model.pth"
+    model_path = "./model.pth"
     model = CIFAR10_CNN()
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
