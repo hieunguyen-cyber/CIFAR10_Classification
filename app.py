@@ -60,7 +60,7 @@ if uploaded_file:
 
     with col1:
         image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="🖼 Ảnh đã tải lên", use_column_width=True)
+        st.image(image, caption="🖼 Ảnh đã tải lên", use_container_width=True)
 
     with col2:
         with st.spinner("⏳ Đang dự đoán..."):
