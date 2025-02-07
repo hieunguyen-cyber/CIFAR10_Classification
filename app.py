@@ -36,34 +36,63 @@ def predict(image, model, device):
     return probabilities.cpu().numpy().flatten()
 
 # === STREAMLIT UI ===
-st.title("CIFAR-10 Image Classifier")
-st.write("Tải lên một ảnh, mô hình sẽ dự đoán lớp tương ứng!")
+# UI chính
+st.set_page_config(page_title="CIFAR-10 Classifier", page_icon="🚀", layout="wide")
 
-uploaded_file = st.file_uploader("Chọn một ảnh...", type=["jpg", "png", "jpeg"])
+# Tiêu đề chính với hiệu ứng
+st.markdown(
+    "<h1 style='text-align: center; color: #4A90E2;'>🚀 CIFAR-10 Image Classifier</h1>",
+    unsafe_allow_html=True
+)
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Ảnh đã tải lên", use_column_width=True)
+st.markdown(
+    "<p style='text-align: center; font-size: 18px;'>Tải lên một ảnh, mô hình sẽ dự đoán lớp tương ứng!</p>",
+    unsafe_allow_html=True
+)
 
-    model, device = load_model()
-    probabilities = predict(image, model, device)
+st.markdown("---")
 
-    # Lấy top-5 class dự đoán
-    top5_indices = probabilities.argsort()[-5:][::-1]
-    top5_labels = [CLASSES[i] for i in top5_indices]
-    top5_probs = [probabilities[i] * 100 for i in top5_indices]  # Đổi thành %
+# Upload ảnh
+uploaded_file = st.file_uploader("📤 Chọn một ảnh...", type=["jpg", "png", "jpeg"], help="Chỉ hỗ trợ JPG, PNG, JPEG")
 
-    # Hiển thị kết quả
-    st.subheader("🎯 Dự đoán:")
-    for label, prob in zip(top5_labels, top5_probs):
-        st.write(f"**{label.capitalize()}**: {prob:.2f}%")
+if uploaded_file:
+    col1, col2 = st.columns([1, 2])  # Chia bố cục 2 cột
 
-    # Vẽ đồ thị
-    fig, ax = plt.subplots()
-    ax.barh(top5_labels[::-1], top5_probs[::-1], color='skyblue')
-    ax.set_xlabel("Xác suất (%)")
-    ax.set_title("Top-5 Dự Đoán")
-    st.pyplot(fig)
+    with col1:
+        image = Image.open(uploaded_file).convert("RGB")
+        st.image(image, caption="🖼 Ảnh đã tải lên", use_column_width=True)
 
-st.write("🚀 Được phát triển với PyTorch & Streamlit!")
-st.write("Author: hieunguyen-cyber")
+    with col2:
+        with st.spinner("⏳ Đang dự đoán..."):
+            model, device = load_model()
+            probabilities = predict(image, model, device)
+
+            # Lấy top-5 class dự đoán
+            top5_indices = probabilities.argsort()[-5:][::-1]
+            top5_labels = [CLASSES[i] for i in top5_indices]
+            top5_probs = [probabilities[i] * 100 for i in top5_indices]  # Đổi thành %
+
+            # Hiển thị kết quả
+            st.markdown("<h3 style='color: #27AE60;'>🎯 Kết quả dự đoán:</h3>", unsafe_allow_html=True)
+
+            for label, prob in zip(top5_labels, top5_probs):
+                st.markdown(f"<p style='font-size:18px;'>✅ <b>{label.capitalize()}</b>: <span style='color:#E74C3C;'>{prob:.2f}%</span></p>", unsafe_allow_html=True)
+
+            # Vẽ biểu đồ
+            fig, ax = plt.subplots(figsize=(6, 3))
+            ax.barh(top5_labels[::-1], top5_probs[::-1], color=['#4A90E2', '#50E3C2', '#F5A623', '#E74C3C', '#8B572A'])
+            ax.set_xlabel("Xác suất (%)")
+            ax.set_title("📊 Top-5 Dự Đoán")
+            st.pyplot(fig)
+
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center;">
+        🚀 Được phát triển với <b>PyTorch</b> & <b>Streamlit</b> | 
+        👨‍💻 Author: <b>hieunguyen-cyber</b> | 
+        🔗 <a href="https://github.com/hieunguyen-cyber" target="_blank" style="color:#4A90E2; text-decoration:none;">GitHub</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
